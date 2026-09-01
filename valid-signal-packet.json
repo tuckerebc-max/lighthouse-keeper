@@ -1,0 +1,56 @@
+{
+  "schema_version": "lighthouse-keeper.signal-packet.v1",
+  "signal_id": "lighthouse-20260831-001",
+  "title": "A candidate packet can be validated without publication",
+  "signal_type": "capability_gain",
+  "scope": {
+    "institution": "navy_yard",
+    "project": "lighthouse-keeper-recovery",
+    "client": null,
+    "workbench": "release-validation",
+    "audience_scope": ["internal_operators"]
+  },
+  "source_window": {
+    "start": "2026-08-31",
+    "end": "2026-08-31"
+  },
+  "source_refs": {
+    "github_refs": ["local:lighthouse-keeper-recovery-package"],
+    "evaluation_run_ids": ["local:package-tests-20260831"]
+  },
+  "observation": "The package contains a manifest, packet schema, evaluator, examples, and deterministic tests.",
+  "reconstruction": "The package was assembled from the controlling candidate package and the source-aligned role materials, then checked in isolation.",
+  "claim": "The candidate package now exposes a traceable Signal Packet contract without granting publication or routing authority.",
+  "evidence": [
+    {
+      "ref": "local:package-tests-20260831",
+      "supports": "The package validator and unit tests validate the manifest, schema, metadata, examples, and debris exclusion.",
+      "observed_at": "2026-08-31T20:00:00Z",
+      "source_revision": "isolated-staging"
+    }
+  ],
+  "warrant": "A reproducible package check is evidence for package coherence, while the explicit candidate status and authority fences prevent it from being treated as activation or permission.",
+  "counterclaim": "Local package tests do not prove runtime registration, connector authorization, or production behavior.",
+  "uncertainties": ["Independent review and the applicable promotion gate remain outstanding."],
+  "boundaries": [
+    "No publication, promotion, routing, capacity allocation, worker assignment, or source mutation is authorized.",
+    "The fixture is synthetic and credential-free."
+  ],
+  "sensitivity": "internal",
+  "confidence": "medium",
+  "freshness_as_of": "2026-08-31",
+  "what_changed": "The package contract and validation surface were reconciled in isolation.",
+  "why_it_matters": "Reviewers can inspect a bounded package with explicit identity, evidence requirements, and authority limits.",
+  "what_follows": "Submit the package for independent review and the existing promotion decision; do not install or publish it from this artifact.",
+  "maturity": "boundary_checked",
+  "audiences": ["internal_operators"],
+  "approval": {
+    "required": true,
+    "state": "pending",
+    "owner": null,
+    "approved_at": null,
+    "notes": "Fixture only; no release authorization."
+  },
+  "created_by": "lighthouse-keeper",
+  "updated_at": "2026-08-31T20:00:00Z"
+}

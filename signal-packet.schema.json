@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workbench.invalid/lighthouse-keeper/signal-packet.schema.json",
+  "title": "Lighthouse Keeper Signal Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "signal_id",
+    "title",
+    "signal_type",
+    "scope",
+    "source_window",
+    "source_refs",
+    "observation",
+    "reconstruction",
+    "claim",
+    "evidence",
+    "warrant",
+    "counterclaim",
+    "uncertainties",
+    "boundaries",
+    "sensitivity",
+    "confidence",
+    "freshness_as_of",
+    "what_changed",
+    "why_it_matters",
+    "what_follows",
+    "maturity",
+    "audiences",
+    "approval",
+    "created_by",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "lighthouse-keeper.signal-packet.v1"},
+    "signal_id": {"type": "string", "pattern": "^lighthouse-[0-9]{8}-[0-9]{3,}$"},
+    "title": {"type": "string", "minLength": 1},
+    "signal_type": {
+      "enum": [
+        "milestone",
+        "capability_gain",
+        "learning",
+        "decision",
+        "failure_repair",
+        "direction",
+        "boundary",
+        "invitation",
+        "correction",
+        "no_material_signal"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["institution", "project", "audience_scope"],
+      "properties": {
+        "institution": {"const": "navy_yard"},
+        "project": {"type": ["string", "null"]},
+        "client": {"type": ["string", "null"]},
+        "workbench": {"type": ["string", "null"]},
+        "audience_scope": {
+          "type": "array",
+          "items": {"enum": ["eric", "sheryl", "tech_triangle_leadership", "internal_operators", "external_peers", "public"]},
+          "minItems": 1
+        }
+      }
+    },
+    "source_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "string", "format": "date"},
+        "end": {"type": "string", "format": "date"}
+      }
+    },
+    "source_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "linear_issue_ids": {"type": "array", "items": {"type": "string"}},
+        "bead_ids": {"type": "array", "items": {"type": "string"}},
+        "notion_page_ids": {"type": "array", "items": {"type": "string"}},
+        "github_refs": {"type": "array", "items": {"type": "string"}},
+        "evaluation_run_ids": {"type": "array", "items": {"type": "string"}},
+        "capability_harvest_ids": {"type": "array", "items": {"type": "string"}},
+        "hermes_run_id": {"type": ["string", "null"]}
+      },
+      "anyOf": [
+        {"required": ["linear_issue_ids"], "properties": {"linear_issue_ids": {"minItems": 1}}},
+        {"required": ["bead_ids"], "properties": {"bead_ids": {"minItems": 1}}},
+        {"required": ["notion_page_ids"], "properties": {"notion_page_ids": {"minItems": 1}}},
+        {"required": ["github_refs"], "properties": {"github_refs": {"minItems": 1}}},
+        {"required": ["evaluation_run_ids"], "properties": {"evaluation_run_ids": {"minItems": 1}}},
+        {"required": ["capability_harvest_ids"], "properties": {"capability_harvest_ids": {"minItems": 1}}}
+      ]
+    },
+    "observation": {"type": "string", "minLength": 1},
+    "reconstruction": {"type": "string", "minLength": 1},
+    "claim": {"type": "string", "minLength": 1},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "supports"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "supports": {"type": "string", "minLength": 1},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "source_revision": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "warrant": {"type": "string", "minLength": 1},
+    "counterclaim": {"type": ["string", "null"]},
+    "uncertainties": {"type": "array", "items": {"type": "string"}},
+    "boundaries": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "sensitivity": {"enum": ["public", "leadership", "internal", "restricted", "client_restricted"]},
+    "confidence": {"enum": ["low", "medium", "high", "unknown"]},
+    "freshness_as_of": {"type": "string", "format": "date"},
+    "what_changed": {"type": "string", "minLength": 1},
+    "why_it_matters": {"type": "string", "minLength": 1},
+    "what_follows": {"type": "string", "minLength": 1},
+    "maturity": {
+      "enum": ["candidate", "source_assembled", "analyzed", "drafted", "boundary_checked", "approved", "published", "monitored", "corrected", "superseded", "retired"]
+    },
+    "audiences": {
+      "type": "array",
+      "items": {"enum": ["eric", "sheryl", "tech_triangle_leadership", "internal_operators", "external_peers", "public"]},
+      "minItems": 1
+    },
+    "canonical_notion_page_id": {"type": ["string", "null"]},
+    "related_linear_issue_ids": {"type": "array", "items": {"type": "string"}},
+    "drafts": {"type": "array", "items": {"type": "object"}},
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "state"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "state": {"enum": ["not_required", "pending", "approved", "denied", "expired", "invalidated"]},
+        "owner": {"type": ["string", "null"]},
+        "approved_at": {"type": ["string", "null"]},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {"type": ["string", "null"]},
+        "url": {"type": ["string", "null"]},
+        "published_at": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]}
+      }
+    },
+    "reception": {"type": "object"},
+    "corrections": {"type": "array", "items": {"type": "string"}},
+    "supersedes": {"type": "array", "items": {"type": "string"}},
+    "superseded_by": {"type": "array", "items": {"type": "string"}},
+    "created_by": {"const": "lighthouse-keeper"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}

@@ -1,0 +1,13 @@
+interface:
+  display_name: Lighthouse Keeper
+  short_description: Compile warranted Navy Yard Signal Packets
+  default_prompt: Use $lighthouse-keeper to compile a warranted Signal Packet from a bounded Navy Yard evidence window; do not route work or run general communications.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workbench.invalid/lighthouse-keeper/package-manifest.schema.json",
+  "title": "Lighthouse Keeper package manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "package_id",
+    "skill_id",
+    "role_id",
+    "display_name",
+    "version",
+    "role_contract_version",
+    "status",
+    "entrypoint",
+    "primary_record_type",
+    "role_specification",
+    "references",
+    "schemas",
+    "examples",
+    "authority",
+    "scope",
+    "provenance"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "package_id": {"const": "lighthouse-keeper"},
+    "skill_id": {"const": "lighthouse-keeper"},
+    "role_id": {"const": "navy-yard.lighthouse-keeper"},
+    "display_name": {"const": "Lighthouse Keeper"},
+    "version": {"const": "0.1.0"},
+    "role_contract_version": {"const": "0.1.0-source-aligned-draft"},
+    "status": {"enum": ["candidate", "reviewed", "promoted", "retired"]},
+    "entrypoint": {"const": "SKILL.md"},
+    "primary_record_type": {"const": "SignalPacket"},
+    "role_specification": {"const": "references/role-specification.md"},
+    "references": {"type": "array", "items": {"type": "string"}, "minItems": 6},
+    "schemas": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+    "examples": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "may_publish",
+        "may_promote",
+        "may_route",
+        "may_assign",
+        "may_allocate_capacity",
+        "may_mutate_source_records",
+        "packet_linked_draft",
+        "publication_requires_approval"
+      ],
+      "properties": {
+        "may_publish": {"const": false},
+        "may_promote": {"const": false},
+        "may_route": {"const": false},
+        "may_assign": {"const": false},
+        "may_allocate_capacity": {"const": false},
+        "may_mutate_source_records": {"const": false},
+        "packet_linked_draft": {"const": true},
+        "publication_requires_approval": {"const": true}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_scope", "out_of_scope"],
+      "properties": {
+        "in_scope": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "out_of_scope": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_package_sha256",
+        "source_repository",
+        "source_commit",
+        "local_source_paths",
+        "reconciliation_status"
+      ],
+      "properties": {
+        "source_package_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_repository": {"type": "string", "format": "uri"},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "local_source_paths": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "reconciliation_status": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

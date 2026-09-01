@@ -1,0 +1,70 @@
+{
+  "$schema": "schemas/package-manifest.schema.json",
+  "package_id": "lighthouse-keeper",
+  "skill_id": "lighthouse-keeper",
+  "role_id": "navy-yard.lighthouse-keeper",
+  "display_name": "Lighthouse Keeper",
+  "version": "0.1.0",
+  "role_contract_version": "0.1.0-source-aligned-draft",
+  "status": "candidate",
+  "entrypoint": "SKILL.md",
+  "primary_record_type": "SignalPacket",
+  "role_specification": "references/role-specification.md",
+  "references": [
+    "references/architecture-integration.md",
+    "references/operating-protocol.md",
+    "references/signal-packet-schema.md",
+    "references/communication-templates.md",
+    "references/evaluator.md",
+    "references/exemplars.md"
+  ],
+  "schemas": [
+    "schemas/signal-packet.schema.json",
+    "schemas/package-manifest.schema.json"
+  ],
+  "examples": [
+    "examples/valid-signal-packet.json",
+    "examples/held-no-material-signal.json"
+  ],
+  "authority": {
+    "may_publish": false,
+    "may_promote": false,
+    "may_route": false,
+    "may_assign": false,
+    "may_allocate_capacity": false,
+    "may_mutate_source_records": false,
+    "packet_linked_draft": true,
+    "publication_requires_approval": true
+  },
+  "scope": {
+    "in_scope": [
+      "bounded signal triage",
+      "source-bundle assembly",
+      "warranted SignalPacket construction",
+      "packet-linked audience projections",
+      "correction and supersession records",
+      "capability-harvest linkage"
+    ],
+    "out_of_scope": [
+      "general communications operations",
+      "cross-project routing",
+      "workpile management",
+      "worker assignment",
+      "capacity allocation",
+      "canonical source mutation",
+      "unapproved publication"
+    ]
+  },
+  "provenance": {
+    "source_package_sha256": "88fee7db8e06e045e6f097b3870f699dce69d2371f783b16dbfe14f6c727a8cd",
+    "source_repository": "https://github.com/tuckerebc-max/lighthouse-keeper",
+    "source_commit": "38ed755fe40b46c88b98e83f59c49a4e44473b34",
+    "local_source_paths": [
+      "01_roles/NAVY_YARD_ROLE_LIGHTHOUSE_KEEPER_SPECIFICATION.md",
+      "01_roles/manifests/lighthouse-keeper.json",
+      "09_operations/sources/LIGHTHOUSE_KEEPER_SOURCE_REVIEW.md",
+      "10_CONTROLLING_RELEASE/github-skills/skills/navy-yard-lighthouse-keeper"
+    ],
+    "reconciliation_status": "source-aligned candidate package; no installation, promotion, registration, activation, or publication"
+  }
+}

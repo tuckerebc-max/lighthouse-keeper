@@ -1,0 +1,52 @@
+{
+  "schema_version": "lighthouse-keeper.signal-packet.v1",
+  "signal_id": "lighthouse-20260831-002",
+  "title": "No material signal from a routine status check",
+  "signal_type": "no_material_signal",
+  "scope": {
+    "institution": "navy_yard",
+    "project": null,
+    "client": null,
+    "workbench": null,
+    "audience_scope": ["internal_operators"]
+  },
+  "source_window": {
+    "start": "2026-08-30",
+    "end": "2026-08-31"
+  },
+  "source_refs": {
+    "bead_ids": ["bead:synthetic-status-001"]
+  },
+  "observation": "A routine execution record reports activity but contains no validated capability change, decision, repair, or new evidence.",
+  "reconstruction": "The record was reviewed for significance and compared with the available acceptance evidence; no warranted institutional change was established.",
+  "claim": "No material institutional signal was warranted in this reporting window.",
+  "evidence": [
+    {
+      "ref": "bead:synthetic-status-001",
+      "supports": "The record contains activity only and no validated outcome.",
+      "observed_at": "2026-08-31T18:00:00Z",
+      "source_revision": "synthetic-fixture"
+    }
+  ],
+  "warrant": "Activity without a meaningful, evidence-bearing change does not warrant a communication signal.",
+  "counterclaim": null,
+  "uncertainties": ["A later evaluator or completed artifact could create a signal in a future window."],
+  "boundaries": ["Do not convert activity, engagement, or a heartbeat into progress or publication."],
+  "sensitivity": "internal",
+  "confidence": "high",
+  "freshness_as_of": "2026-08-31",
+  "what_changed": "No warranted institutional change was established.",
+  "why_it_matters": "The no-signal result protects attention and keeps communication evidence-centered.",
+  "what_follows": "Keep the item in its owning workflow and review again when a validated outcome or decision exists.",
+  "maturity": "analyzed",
+  "audiences": ["internal_operators"],
+  "approval": {
+    "required": false,
+    "state": "not_required",
+    "owner": null,
+    "approved_at": null,
+    "notes": "No outward projection is proposed."
+  },
+  "created_by": "lighthouse-keeper",
+  "updated_at": "2026-08-31T20:00:00Z"
+}
