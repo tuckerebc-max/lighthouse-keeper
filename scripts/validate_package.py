@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
@@ -43,6 +43,31 @@ FORBIDDEN_DEBRIS = re.compile(
 
 def fail(message: str, errors: list[str]) -> None:
     errors.append(message)
+
+
+def validate_package_path(value: object, context: str, errors: list[str]) -> None:
+    if not isinstance(value, str) or not value:
+        fail(f"{context} must name a package file", errors)
+        return
+    relative = PurePosixPath(value)
+    if (
+        relative.is_absolute()
+        or PureWindowsPath(value).drive
+        or "\\" in value
+        or ":" in value
+        or ".." in relative.parts
+        or any(part.endswith((".", " ")) for part in relative.parts)
+    ):
+        fail(f"{context} must use a portable relative path inside the package: {value}", errors)
+        return
+    try:
+        target = (ROOT / value).resolve()
+        if not target.is_relative_to(ROOT):
+            fail(f"{context} resolves outside the package: {value}", errors)
+        elif not target.is_file():
+            fail(f"{context} points to missing file: {value}", errors)
+    except (OSError, RuntimeError, ValueError) as exc:
+        fail(f"{context} has an invalid path {value!r}: {exc}", errors)
 
 
 def read_json(path: Path, errors: list[str]):
@@ -102,6 +127,8 @@ def main() -> int:
             fail(f"SKILL.md is missing boundary/workflow concept: {concept}", errors)
 
     manifest = read_json(ROOT / "manifest.json", errors)
+    if not isinstance(manifest, dict):
+        fail("manifest.json must be a JSON object", errors)
     package_schema = read_json(ROOT / "schemas/package-manifest.schema.json", errors)
     packet_schema = read_json(ROOT / "schemas/signal-packet.schema.json", errors)
     if isinstance(package_schema, dict):
@@ -119,13 +146,13 @@ def main() -> int:
             f"manifest: {e.message}"
             for e in Draft202012Validator(package_schema, format_checker=FormatChecker()).iter_errors(manifest)
         )
-        for field in ("role_specification", "references", "schemas", "examples"):
+        for field in ("$schema", "entrypoint", "role_specification", "references", "schemas", "examples"):
             values = manifest.get(field, [])
             if isinstance(values, str):
                 values = [values]
-            for rel in values:
-                if not (ROOT / rel).is_file():
-                    fail(f"manifest {field} points to missing file: {rel}", errors)
+            if isinstance(values, list):
+                for rel in values:
+                    validate_package_path(rel, f"manifest {field}", errors)
 
     if isinstance(packet_schema, dict):
         validator = Draft202012Validator(packet_schema, format_checker=FormatChecker())
@@ -146,14 +173,25 @@ def main() -> int:
     except (OSError, yaml.YAMLError) as exc:
         fail(f"invalid OpenAI metadata: {exc}", errors)
     else:
-        interface = metadata.get("interface", {}) if isinstance(metadata, dict) else {}
+        if not isinstance(metadata, dict):
+            fail("OpenAI metadata must be a mapping", errors)
+            metadata = {}
+        interface = metadata.get("interface")
+        if not isinstance(interface, dict):
+            fail("OpenAI metadata interface must be a mapping", errors)
+            interface = {}
         if interface.get("display_name") != "Lighthouse Keeper":
             fail("OpenAI metadata display_name must be Lighthouse Keeper", errors)
         prompt = interface.get("default_prompt", "")
-        if "$lighthouse-keeper" not in prompt:
+        if not isinstance(prompt, str):
+            fail("OpenAI metadata default_prompt must be a string", errors)
+        elif "$lighthouse-keeper" not in prompt:
             fail("OpenAI metadata default_prompt must invoke $lighthouse-keeper", errors)
-        if FORBIDDEN_IDENTITY.search(prompt):
+        elif FORBIDDEN_IDENTITY.search(prompt):
             fail("OpenAI metadata contains forbidden identity text", errors)
+        for field in ("icon_small", "icon_large"):
+            if field in interface:
+                validate_package_path(interface[field], f"OpenAI metadata {field}", errors)
 
     if errors:
         print("Lighthouse Keeper package validation failed:")

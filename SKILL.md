@@ -68,8 +68,10 @@ applicable human or specialist approval.
 
 ## Verification
 
-Run `python scripts/validate_package.py` and
-`python -m unittest discover -s tests -v`. Passing proves local package
+With the pinned requirements installed in a Python 3.11+ environment outside
+the package, run `python -B scripts/validate_package.py` and
+`python -B -m unittest discover -s tests -v`. The `-B` flag prevents bytecode
+files from invalidating the package's debris check. Passing proves local package
 structure and fixture behavior only; it does not establish installation,
 promotion, runtime registration, authorization, publication, or production
 readiness.

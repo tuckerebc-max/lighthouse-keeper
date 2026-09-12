@@ -49,12 +49,18 @@ No packet means no material outward prose. Activity alone is not a signal.
 
 ## Verification
 
-From this package directory, run:
+Use Python 3.11 or later with an environment outside this package. From this
+package directory, install the pinned dependencies and run:
 
 ```text
-python scripts/validate_package.py
-python -m unittest discover -s tests -v
+python -m pip install -r requirements.txt
+python -B scripts/validate_package.py
+python -B -m unittest discover -s tests -v
 ```
+
+The `-B` flag prevents test imports from creating bytecode files that the
+package's debris check rejects. Manifest file references and metadata icons
+must use forward-slash relative paths to files inside the package.
 
 Passing these checks establishes package integrity only. It does not install,
 promote, register, activate, publish, or certify the skill for production.
